@@ -1,0 +1,14 @@
+# Read pre-computed data file directly
+filename = "y_branch.dat";
+
+if (fileexists(filename)) {
+    # Load and plot S-parameters directly from file
+    M = readdata(filename);
+    
+    # Run conversion & plot using your existing converter script
+    add_group_delay_FDTD_spar;
+    
+    ? "Successfully loaded and plotted data from " + filename;
+} else {
+    ? "File y_branch.dat not found in current directory.";
+}
