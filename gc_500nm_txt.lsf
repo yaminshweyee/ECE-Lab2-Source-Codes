@@ -1,0 +1,28 @@
+# Script to export S-parameters for gc_500nm
+clear;
+
+# Ensure the simulation has been run and results exist
+if (layoutmode) {
+    run;
+}
+
+# Extract S-parameter dataset from the expansion monitor / port
+S = getresult("FDTD::ports", "S"); 
+
+filename = "gc_500nm_S_params.txt";
+if (fileexists(filename)) {
+    rm(filename);
+}
+
+# Export frequency grid and S-matrix components
+f = S.f;
+write(filename, "# S-parameters exported for pitch = 500 nm");
+write(filename, "# frequency_points = " + num2str(length(f)));
+
+for (i=1:length(f)) {
+    str = num2str(f(i)) + " " + num2str(abs(S.S11(i))) + " " + num2str(angle(S.S11(i))) + " " + num2str(abs(S.S21(i))) + " " + num2str(angle(S.S21(i)));
+    write(filename, str);
+}
+
+savelocal("gc_500nm_S_params.dat", S);
+? "Successfully generated gc_500nm_S_params.txt and gc_500nm_S_params.dat!";
